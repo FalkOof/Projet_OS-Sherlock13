@@ -47,17 +47,17 @@ La partie se termine dès qu’un joueur fait une accusation correct ou s'il ne 
 # Compilation et Execution du Projet 
 
 Pour compiler le Projet, un makefile était déjà fournis, il suffit de l'exécuter en faisant la commande : 
-   ```bash
-   ./cmd.sh
-   ```
+```bash
+./cmd.sh
+```
 Suite à cela il vous faudra ouvrir un total de 5 terminaux, 1 pour le serveur et 1 pour chaque joueur. 
 On peut lancer le serveur en l'executant et en indiquant un numero de port, par exemple : 
-   ```bash
-   ./server 1234
-   ```
-Et on peut lancer chaque joueur en executant le client et en indiquant sur quel port est le serveur, sur quel port communiquer et quel est le nom du joueur, par exemple : 
-    ```bash
-    ./sh13 127.0.0.1 1234 127.0.0.1 12340 Test0
-    ```
+```bash
+./server 1234
+```
+Et on peut lancer chaque joueur en executant le client et en indiquant sur quel port est le serveur, sur quel port communiquer et quel est le nom du joueur, par exemple :
+```bash
+./sh13 127.0.0.1 1234 127.0.0.1 12340 Test0
+```
 
 Pour chaque client, il suffit alors de cliquer sur le bouton "Connect" qui apparait avec l'interface graphique lors de l'exécution du client.
