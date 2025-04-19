@@ -1,22 +1,22 @@
-### Projet OS : Jeu Sherlock13
+# Projet OS : Jeu Sherlock13
 
 ## Introduction
 Ce projet regroupe les concepts abordés lors des TPs réalisés avec M. PECHEUX ainsi que la réalisation du jeu multijoueur Sherlock13.
 
-# But du jeu :
+### But du jeu :
 Trouver quel personnage est le criminel, c’est-à-dire le seul personnage non visible par les joueurs (la seule carte cachée).
 
 
-# Contenu du jeu :
+### Contenu du jeu :
 - 13 cartes Personnage (chacun ayant des symboles spécifiques)
 - Un bloc de feuilles d’enquête
 
 
-# Mécaniques de base
+### Mécaniques de base
 Chaque joueur se voit attribué 4 cartes personnages mais une carte est cachée : c’est le criminel. En posant des questions aux autres joueurs, il faut déduire quel personnage est sur cette carte cachée.
 
 
-# Déroulement d’un tour
+### Déroulement d’un tour
 Chaque joueur choisit, lors de son tour, une seule action parmi les 3 suivantes :
 
 1 :
@@ -34,11 +34,11 @@ Chaque joueur choisit, lors de son tour, une seule action parmi les 3 suivantes 
     Si tu as tort → tu es éliminé, mais tu continues à répondre aux questions.
 
 
-# Utilisation de la feuille d’enquête
+### Utilisation de la feuille d’enquête
 Celle-ci est divisée en deux parties :
 En haut, tu coches les symboles vus et fais des déductions.
 En bas, tu notes les cartes que tu as vues (les tiennes), et ce que les autres révèlent petit à petit.
 
 
-# Fin de la partie
+### Fin de la partie
 La partie se termine dès qu’un joueur fait une accusation correct ou s'il ne reste plus qu'un joueur dans la partie (les autres sont éliminés).
