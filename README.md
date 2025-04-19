@@ -59,7 +59,25 @@ Et on peut lancer chaque joueur en executant le client et en indiquant sur quel 
 ```bash
 ./sh13 127.0.0.1 1234 127.0.0.1 12340 Test0
 ```
+
 Pensez bien à changer le port sur lequel le client communique à chaque client.
 
 Ensuite, pour chaque joueurs, il suffit alors de cliquer sur le bouton "Connect" qui apparait avec l'interface graphique lors de l'exécution du client.
 Une fois que tous les joueurs sont connectés, le jeu peut actuellement commencer selon les règles décrites ci-dessus.
+
+
+
+# Code Complété, ce qui a été ajouté
+
+## Code du Client
+
+
+
+
+## Code du Serveur
+
+
+
+
+
+# Fonctionnement du Projet 
