@@ -1,6 +1,6 @@
-#include <SDL.h>        
-#include <SDL_image.h>        
-#include <SDL_ttf.h>        
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL_ttf.h" 
 #include <pthread.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -333,7 +333,7 @@ int main(int argc, char ** argv){
 				case 'V':
 					// RAJOUTER DU CODE ICI
 					int numJ2, numC, valeur;
-					sscanf(gbuffer, "V %d %d %d", &numJ2, &numC, &valeur);
+					sscanf(gbuffer, "V %d %d %d", &numJ2, &numC, &valeur);	
 					tableCartes[numJ2][numC] = valeur;
 					printf("Numero du Joueur : %d ; Numero de la carte : %d ; Valeur : %d\n", numJ2, numC, valeur);
 
@@ -426,7 +426,7 @@ int main(int argc, char ** argv){
 						sprintf(mess,"*");
 					}
 					else{
-						printf(mess,"%d",tableCartes[i][j]);
+						sprintf(mess,"%d",tableCartes[i][j]);
 					}
             	    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, mess, col1);
             	    SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);

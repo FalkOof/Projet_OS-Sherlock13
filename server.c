@@ -8,6 +8,7 @@
 
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <time.h>
 
 struct _client{
     char ipAddress[40];
@@ -223,6 +224,7 @@ int main(int argc, char *argv[]){
 		eliminated[i] = 0;
 	}
 	int allEliminated = 0;
+	srand(time(NULL));
 
     if(argc < 2){
         fprintf(stderr, "ERROR, no port provided\n");
@@ -307,7 +309,7 @@ int main(int argc, char *argv[]){
 						sprintf(reply, "D %d %d %d", deck[0], deck[1], deck[2]); // On envoie ses cartes à au joueur 0
 						sendMessageToClient(tcpClients[0].ipAddress, tcpClients[0].port, reply); // On envoie un message au joueur 0
 						for(int j = 0 ; j < 8 ; j++){ // On update la table du joueur 
-							sprintf(reply, "V %d %d", j, tableCartes[0][j]);
+							sprintf(reply, "V 0 %d %d", j, tableCartes[0][j]);
 							sendMessageToClient(tcpClients[0].ipAddress, tcpClients[0].port, reply);
 						}
 						// On envoie ses cartes au joueur 1, ainsi que la ligne qui lui correspond dans tableCartes
@@ -316,7 +318,7 @@ int main(int argc, char *argv[]){
 						sprintf(reply, "D %d %d %d", deck[3], deck[4], deck[5]);
 						sendMessageToClient(tcpClients[1].ipAddress, tcpClients[1].port, reply);
 						for(int j = 0 ; j < 8 ; j++){
-							sprintf(reply, "V %d %d", j, tableCartes[1][j]);
+							sprintf(reply, "V 1 %d %d", j, tableCartes[1][j]);
 							sendMessageToClient(tcpClients[1].ipAddress, tcpClients[1].port, reply);
 						}
 						// On envoie ses cartes au joueur 2, ainsi que la ligne qui lui correspond dans tableCartes
@@ -324,7 +326,7 @@ int main(int argc, char *argv[]){
 						sprintf(reply, "D %d %d %d", deck[6], deck[7], deck[8]);
 						sendMessageToClient(tcpClients[2].ipAddress, tcpClients[2].port, reply);
 						for(int j = 0 ; j < 8 ; j++){
-							sprintf(reply, "V %d %d", j, tableCartes[2][j]);
+							sprintf(reply, "V 2 %d %d", j, tableCartes[2][j]);
 							sendMessageToClient(tcpClients[2].ipAddress, tcpClients[2].port, reply);
 						}
 						// On envoie ses cartes au joueur 3, ainsi que la ligne qui lui correspond dans tableCartes
@@ -332,7 +334,7 @@ int main(int argc, char *argv[]){
 						sprintf(reply, "D %d %d %d", deck[9], deck[10], deck[11]);
 						sendMessageToClient(tcpClients[3].ipAddress, tcpClients[3].port, reply);
 						for(int j = 0 ; j < 8 ; j++){
-							sprintf(reply, "V %d %d", j, tableCartes[3][j]);
+							sprintf(reply, "V 3 %d %d", j, tableCartes[3][j]);
 							sendMessageToClient(tcpClients[3].ipAddress, tcpClients[3].port, reply);
 						}
 						// On envoie enfin un message a tout le monde pour definir qui est le joueur courant=0
@@ -340,16 +342,16 @@ int main(int argc, char *argv[]){
 						sprintf(reply, "M %d", joueurCourant);
 						broadcastMessage(reply);
 
-                        fsmServer=1;
+                        fsmServer = 1;
 					}
 					break;
             }
 		}
-		else if(fsmServer==1){
+		else if(fsmServer == 1){
 
 			for(int i = 0 ; i <= 3 ; i++){ // On regarde si le joueur actuel est éliminé
 				if(eliminated[joueurCourant] != 0){
-					sprintf(reply, "Le Joueur %d est elimine, on passe au joueur suivant.", joueurCourant);
+					sprintf(reply, "Joueur %d est elimine, on passe au joueur suivant.", joueurCourant);
 					broadcastMessage(reply);
 					joueurCourant++;
 				}
@@ -363,7 +365,7 @@ int main(int argc, char *argv[]){
 					sscanf(buffer, "G %d %d", &joueurCourant, &coupable);
 
 					if(coupable == deck[12]){ // deck[12] est le vrai coupable
-						sprintf(reply, "Le Joueur %d a trouve le coupable.", joueurCourant);
+						sprintf(reply, "Joueur %d a trouve le coupable.", joueurCourant);
 						broadcastMessage(reply);
 						fsmServer = 2; // Fin de la partie
 						sprintf(reply, "FIN DE LA PARTIE");
@@ -374,19 +376,30 @@ int main(int argc, char *argv[]){
 					}
 
 					else{
-						sprintf(reply, "Le Joueur %d n'a pas trouve le coupable. Il est elimine de la partie.", joueurCourant);
+						sprintf(reply, "Joueur %d n'a pas trouve le coupable. Il est elimine de la partie.", joueurCourant);
 						broadcastMessage(reply);
 						eliminated[joueurCourant] = 1;
 
-						allEliminated = 1;
+						int compt = 0;
 						for(int i = 0 ; i <= 3 ; i++){
-							if(eliminated[i] == 0){
-							allEliminated = 0;
+							if(eliminated[i] == 1){
+								compt++;
+							}
+						}
+						int id = 0;
+						if (compt >=3){
+							allEliminated = 1;
+							for(int i = 0 ; i <= 3 ; i++){
+								if(eliminated[i] == 0){
+									id = i;
+								}
 							}
 						}
 
-						if(allEliminated = 1){
-							sprintf(reply, "Tous les joueurs ont ete elimines.");
+						if(allEliminated == 1){
+							sprintf(reply, "Tous les joueurs sauf 1 ont ete elimines.");
+							broadcastMessage(reply);
+							sprintf(reply, "Joueur %d a gagné.", id);
 							broadcastMessage(reply);
 							sprintf(reply, "FIN DE LA PARTIE");
 							broadcastMessage(reply);
@@ -399,10 +412,9 @@ int main(int argc, char *argv[]){
 					break;
 
 				// Message '0' : le serveur reçoit une demande de symbole globale
-    	        case 'O':
-					// RAJOUTER DU CODE ICI
-					int idSymbole, nbJoueursSymbole = 0;
-					sscanf(buffer, "O %d", &idSymbole);
+				case 'O':
+					int idEmetteur, idSymbole, nbJoueursSymbole = 0;
+					sscanf(buffer, "O %d %d", &idEmetteur, &idSymbole);
 					for(int i = 0 ; i < 4 ; i++){
 						if(tableCartes[i][idSymbole] > 0){
 							nbJoueursSymbole++;
@@ -414,20 +426,19 @@ int main(int argc, char *argv[]){
 					else{
 						sprintf(reply, "R %d 0", nbJoueursSymbole);
 					}
-					sendMessageToClient(tcpClients[joueurCourant].ipAddress, tcpClients[joueurCourant].port, reply);
-
+					sendMessageToClient(tcpClients[idEmetteur].ipAddress, tcpClients[idEmetteur].port, reply);
+				
 					break;
 
 				// Message 'S' : le serveur reçoit une demande de symbole envers un joueur particulier
 				case 'S':
-					// RAJOUTER DU CODE ICI
-					int idJoueur, idSymbole2, nbCartes;
-					sscanf(buffer, "S %d %d", &idJoueur, &idSymbole2);
+					int idEmetteur2, idJoueur, idSymbole2, nbCartes;
+					sscanf(buffer, "S %d %d %d", &idEmetteur2, &idJoueur, &idSymbole2);
 					nbCartes = tableCartes[idJoueur][idSymbole2];
+				
 					sprintf(reply, "R %d", nbCartes);
-					sendMessageToClient(tcpClients[joueurCourant].ipAddress, tcpClients[joueurCourant].port, reply);
-					
-					break;
+					sendMessageToClient(tcpClients[idEmetteur2].ipAddress, tcpClients[idEmetteur2].port, reply);
+				break;
 
     	        default:
     	            break;
