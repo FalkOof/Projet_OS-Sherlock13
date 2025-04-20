@@ -19,22 +19,22 @@ Chaque joueur se voit attribué 4 cartes personnages mais une carte est cachée 
 ### Déroulement d’un tour
 Chaque joueur choisit, lors de son tour, une seule action parmi les 3 suivantes :
 
-1 : - Choisir un symbole (ex : loupe, crâne…).
-    - Demander aux autres qui possèdent ce symbole de le dire.
-    On apprend alors combien de personnes possèdent ce symbole
+- Choisir un symbole (ex : loupe, crâne…).
+- Demander aux autres qui possèdent ce symbole de le dire.
+  On apprend alors combien de personnes possèdent ce symbole
 
-2 : - Choisir un joueur spécifique et un symbole.
-    Ce joueur doit te dire combien de fois il voit ce symbole parmi ses cartes.
+- Choisir un joueur spécifique et un symbole.
+  Ce joueur doit te dire combien de fois il voit ce symbole parmi ses cartes.
 
-3 : - Accuser un personnage que tu soupçonnes être le criminel.
-    Si tu as raison → tu gagnes !
-    Si tu as tort → tu es éliminé, mais tu continues à répondre aux questions.
+- Accuser un personnage que tu soupçonnes être le criminel.
+  Si on a raison, on gagne.
+  Si on a tort, on est éliminé mais on continue à répondre aux questions.
 
 
 ### Utilisation de la feuille d’enquête
 Celle-ci est divisée en deux parties :
-En haut, tu coches les symboles vus et fais des déductions.
-En bas, tu notes les cartes que tu as vues (les tiennes), et ce que les autres révèlent petit à petit.
+En haut, on coche les symboles vus et on fait des déductions.
+En bas, on note les cartes que l'on a dans notre main, et ce que les autres révèlent petit à petit.
 
 
 ### Fin de la partie
@@ -116,10 +116,33 @@ Enfin, à chaque fin de tour le serveur met à jour le joueur courant en sautant
 ## Code du Client
 
 
+Le but du client est de se connecter au serveur, de recevoir les informations de jeu, et de permettre à l’utilisateur de jouer son tour ainsi que d'envoyer ses actions au serveur.
 
+### Connexion au serveur et Réception des données
+Le client commence par se connecter au serveur via une socket TCP en utilisant socket(), puis connect() pour établir la connexion. Une fois connecté, il envoie un message de type C contenant son IP, son port d’écoute (pour recevoir des messages du serveur ou d'autres clients) ainsi que son pseudo.
+Le client crée également une socket d'écoute sur son propre port pour pouvoir recevoir des messages entrants, en utilisant bind() puis listen() et un accept() dans un thread séparé (puisqu’on veut pouvoir écouter et envoyer en même temps). Ce thread gère les messages entrants en continu.
+
+
+Une fois connecté, le client reçoit différentes informations du serveur :
+- un message de type I id pour indiquer au client son identifiant (entre 0 et 3).
+- un message de type L nom1 nom2 nom3 nom4 pour annoncer les pseudos de tous les joueurs connectés.
+- un message de type D c1 c2 c3, ce sont les identifiants des 3 cartes que possède le joueur.
+- une série de messages V id i j pour compléter la table de symboles visibles du joueur (tableCartes).
+
+Le client initialise alors son interface ou ses structures internes avec les infos de départ.
+
+### Déroulement du jeu côté client
+
+Quand c’est au tour du joueur, il reçoit un message M id avec id étant son propre identifiant. À ce moment, une boucle permet à l’utilisateur de choisir une action parmi les suivantes :
+- faire une demande globale de symbole (message O s) : le joueur demande au serveur combien de joueurs possèdent un certain symbole s. Le serveur répond avec un message R nb x, où x vaut 0 si personne ne le possède.
+- faire une demande ciblée de symbole (message S id s) : le joueur demande combien de fois le joueur id possède le symbole s. Le serveur répond avec un message R nbSymbole.
+- faire une accusation (message G c) : le joueur accuse une carte d’être le coupable. Le serveur renvoie ensuite le résultat de l'accusation, met éventuellement à jour les états, et annonce si la partie est terminée.
+
+Une fois l’action terminée, le joueur attend la fin de son tour. À la fin de chaque tour, un nouveau message M id est reçu pour indiquer qui joue ensuite.
 
 
 ## Lien avec les concepts techniques abordés en TP
 
 L'application créée repose sur la communication client-serveur via des sockets TCP avec les fonctions usuelles socket(), bind(), listen(), accept() pour créer un serveur. On utilise aussi forcément connect() pour envoyer une réponse à un client. Le programme est mono-processus, il n'y a aucune création de processus enfants avec fork(). Enfin, le serveur est séquentiel : il traite chaque message reçu dans une boucle while principale.
+Afin de gérer la communication simultanée (réception du serveur et actions de l’utilisateur), le client utilise deux threads : un thread principal pour interagir avec l’utilisateur (entrées clavier, affichage), et un thread secondaire pour écouter en continu les messages du serveur (ou d’autres clients, si jamais on avait besoin).
 
