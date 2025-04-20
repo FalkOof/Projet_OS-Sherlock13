@@ -3,11 +3,10 @@
 ## Introduction
 Ce projet regroupe les concepts abordés lors des TPs réalisés avec M. PECHEUX ainsi que la réalisation du jeu multijoueur Sherlock13.
 
-### But du jeu 
+### But et Contenu du jeu 
 Trouver quel personnage est le criminel, c’est-à-dire le seul personnage non visible par les joueurs (la seule carte cachée).
 
-
-### Contenu du jeu
+Le jeu est composé de :
 - 13 cartes Personnage (chacun ayant des symboles spécifiques)
 - Un bloc de feuilles d’enquête
 
@@ -15,9 +14,7 @@ Trouver quel personnage est le criminel, c’est-à-dire le seul personnage non 
 ### Mécaniques de base
 Chaque joueur se voit attribué 4 cartes personnages mais une carte est cachée : c’est le criminel. En posant des questions aux autres joueurs, il faut déduire quel personnage est sur cette carte cachée.
 
-
-### Déroulement d’un tour
-Chaque joueur choisit, lors de son tour, une seule action parmi les 3 suivantes :
+Chaque tour, chaque joueur choisit, lors de son tour, une seule action parmi les 3 suivantes :
 
 - Choisir un symbole (ex : loupe, crâne…).
 - Demander aux autres qui possèdent ce symbole de le dire.
@@ -144,5 +141,3 @@ Une fois l’action terminée, le joueur attend la fin de son tour. À la fin de
 ## Lien avec les concepts techniques abordés en TP
 
 L'application créée repose sur la communication client-serveur via des sockets TCP avec les fonctions usuelles socket(), bind(), listen(), accept() pour créer un serveur. On utilise aussi forcément connect() pour envoyer une réponse à un client. Le programme est mono-processus, il n'y a aucune création de processus enfants avec fork(). Enfin, le serveur est séquentiel : il traite chaque message reçu dans une boucle while principale.
-Afin de gérer la communication simultanée (réception du serveur et actions de l’utilisateur), le client utilise deux threads : un thread principal pour interagir avec l’utilisateur (entrées clavier, affichage), et un thread secondaire pour écouter en continu les messages du serveur (ou d’autres clients, si jamais on avait besoin).
-
