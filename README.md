@@ -150,5 +150,3 @@ Le programme repose sur un modèle mono-processus, c’est-à-dire qu’il ne fa
 En revanche, le client fait usage d’un thread secondaire, lancé avec `pthread_create()`. Ce thread est dédié à l’écoute continue des messages envoyés par le serveur, de manière à ne pas bloquer l’interface graphique principale, gérée via SDL2. Il exécute la fonction `fn_serveur_tcp`, qui remplit un tampon (gbuffer) à chaque réception de message.
 
 Pour assurer une bonne coordination entre ce thread et la boucle principale du programme, un système de synchronisation est mis en place. Cela passe notamment par l'utilisation d’un flag volatile `synchro` et d’un mutex `pthread_mutex_t` afin de protéger les accès concurrents à la mémoire partagée. Ainsi, le projet illustre clairement l’interaction entre sockets pour la communication, threads pour la gestion asynchrone, et mutex pour la protection des ressources partagées.
-
-## Paramètres d'amélioration
