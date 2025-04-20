@@ -105,7 +105,7 @@ Enfin, le serveur annonce le début du jeu en envoyant le message `M 0`, indiqua
 Pendant la partie, le serveur gère différentes actions des joueurs, identifiées par la première lettre du message reçu quand ils envoient un. Il faut donc faire attention lorsque l'on essaye de print quelque chose dans le terminal car si le message contient en première lettre une des lettres suivantes, cela peut casser le code. il y a différentes actions possibles dont voici la liste :
 - G (accusation d'un coupable) : le serveur vérifie si la carte désignée est bien le coupable. Si oui alors le joueur a gagné et la partie est terminée, si non alors le joueur est éliminé, il ne jouera plus et son tour sera passé. Si tous les joueurs sauf un sont éliminés, alors la partie prend fin (état `fsmServer = 2`).
 - O (demande globale de symbole) : le serveur compte combien de joueurs ont ce symbole et il répond `R nb x` si au moins un joueur possède le symbole, sinon il répond `R nb 0`.
-- S (demande ciblée de symbole) : le serveur regarde combien de fois le joueur idCible possède ce symbole et répond R nbSymbole.
+- S (demande ciblée de symbole) : le serveur regarde combien de fois le joueur `idCible` possède ce symbole et répond `R nbSymbole`.
 
 Enfin, à chaque fin de tour le serveur met à jour le joueur courant en sautant les joueurs éliminés et il envoie à tous un message `M id` pour indiquer qui joue ensuite.
 
