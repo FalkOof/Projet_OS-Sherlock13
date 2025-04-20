@@ -67,14 +67,9 @@ Une fois que tous les joueurs sont connectés, le jeu peut actuellement commence
 
 
 
-# Code Complété, ce qui a été ajouté
+# Fonctionnement complet du code
 
-## Code du Client résumé
-
-
-
-
-## Code du Serveur résumé
+## Code du Serveur
 
 On rappelle que le but ici est de permettre au serveur de gérer les connexions de 4 clients, leur distribue des cartes, et s'occupe des tours de jeu jusqu’à la fin de la partie (accusation correcte ou élimination de tous sauf un joueur).
 
@@ -122,14 +117,13 @@ Pendant la partie, le serveur gère différentes actions des joueurs, identifié
 Enfin, à chaque fin de tour le serveur met à jour le joueur courant en sautant les joueurs éliminés et il envoie à tous un message M id pour indiquer qui joue ensuite.
 
 
+## Code du Client
 
 
-### x) Lien avec les concepts techniques abordés en TP
+
+
+
+# Lien avec les concepts techniques abordés en TP
+
 L'application créée repose sur la communication client-serveur via des sockets TCP avec les fonctions usuelles socket(), bind(), listen(), accept() pour créer un serveur. On utilise aussi forcément connect() pour envoyer une réponse à un client. Le programme est mono-processus, il n'y a aucune création de processus enfants avec fork(). Enfin, le serveur est séquentiel : il traite chaque message reçu dans une boucle while principale.
 
-
-
-
-
-
-# Fonctionnement du Projet 
